@@ -1,0 +1,22 @@
+title: jasty.dev
+author: "Jack Weinstein"
+email: blog@jasty.dev
+description: >-
+  Look, I made a thing!
+url: https://jasty.dev
+domain: jasty.dev
+github_username: weinstein
+linkedin_username: jhsw93
+rss: rss
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+google_analytics: G-2D5VCWZTBJ
+
+collections:
+  games:
+    output: true

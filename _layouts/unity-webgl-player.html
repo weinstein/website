@@ -1,15 +1,14 @@
-<!DOCTYPE html>
-<html lang="en-us">
+---
+layout: default
+---
+
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | dungeon</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
+    <link rel="shortcut icon" href="unity-player/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="unity-player/TemplateData/style.css">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600></canvas>
+      <canvas id="unity-canvas" width="100%" height="100%"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -20,9 +19,10 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">dungeon</div>
+        <div id="unity-build-title">{{ page.name }}</div>
       </div>
     </div>
+
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
@@ -55,16 +55,16 @@
         updateBannerVisibility();
       }
 
-      var buildUrl = "Build";
+      var buildUrl = "{{page.name}}";
       var loaderUrl = buildUrl + "/WebGL.loader.js";
       var config = {
         dataUrl: buildUrl + "/WebGL.data",
         frameworkUrl: buildUrl + "/WebGL.framework.js",
         codeUrl: buildUrl + "/WebGL.wasm",
-        streamingAssetsUrl: "StreamingAssets",
+        streamingAssetsUrl: "unity-player/StreamingAssets",
         companyName: "DefaultCompany",
-        productName: "dungeon",
-        productVersion: "0.0.36",
+        productName: "{{page.name}}",
+        productVersion: "0.0.1",
         showBanner: unityShowBanner,
       };
 
@@ -95,8 +95,8 @@
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
 
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
       }
 
       loadingBar.style.display = "block";
@@ -117,5 +117,8 @@
       };
       document.body.appendChild(script);
     </script>
+
+    <div class="wrapper">
+        {{ content }}
+    </div>
   </body>
-</html>
