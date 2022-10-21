@@ -1,12 +1,14 @@
 title: jasty.dev
-author: "Jack Weinstein"
-email: blog@jasty.dev
+author:
+  name: "Jack Weinstein"
+  email: blog@jasty.dev
 description: >-
   Look, I made a thing!
 url: https://jasty.dev
 domain: jasty.dev
-github_username: weinstein
-linkedin_username: jhsw93
+social:
+  github: weinstein
+  linkedin: jhsw93
 rss: rss
 
 # Build settings
