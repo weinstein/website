@@ -18,9 +18,11 @@ It has around **24h of autonomy between windings** at the height I have it curre
 
 It looks nice enough that I'm proud to display it in my living room. All the gears and guts are exposed for the world to see and it has easily readablehour markers.
 
+<iframe width="600" height="320" src="https://www.youtube.com/embed/swCGVruqXJc" title="Lego Pendulum Clock" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block; margin-left:auto; margin-right:auto"></iframe>
+
 Here's the [stud.io model file](/static/jasty-lego-clock.io) in case you're curious about building your own pendulum clock. Keep reading to learn more about how I designed this clock and how it works!
 
-![Lego pendulum clock](/img/lego-clock/PXL_20221020_222852016.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
+<iframe width="367" height="653" src="https://www.youtube.com/embed/Xcd6ukmx8ac" title="Lego Pendulum Clock" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block; margin-left:auto; margin-right:auto"></iframe>
 
 ## Inspiration
 
