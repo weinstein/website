@@ -12,9 +12,9 @@ Behold, I have created a weight-driven pendulum clock to hang on my wall, 100% o
 
 ![Lego clock gear train](/img/lego-clock/PXL_20221020_215518572.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-The entire gear train is very compact; everything including the drive train is packed into a 7x11x9 stud volume, roughly the size of a small grapefruit.
+The entire gear train is very compact; everything including the drive train is packed into a 7x11x9 stud (56mm x 88mm x 72mm) volume, roughly the size of a small grapefruit.
 
-It has around **24h of autonomy between windings** at the height I have it currently mounted. It's also **accurate to within 1 minute per day**. In fact, its more accurate than my consumer wrist watch[^1].
+It has around **24h of autonomy between windings** at the height I have it mounted. It's also **accurate to within 1 minute per day**. In fact, its more accurate than my consumer wrist watch[^1].
 
 It looks nice enough that I'm proud to display it in my living room. All the gears and guts are exposed for the world to see and it has easily readablehour markers.
 
@@ -26,9 +26,9 @@ Here's the [stud.io model file](/static/jasty-lego-clock.io) in case you're curi
 
 ## Inspiration
 
-Growing up, my grandma had a wooden pendulum clock above her fireplace that now lives in my parents' living room, and the soft tick-tock that it makes is comforting and nostalgic.
+Growing up, my grandma had a wooden pendulum clock above her fireplace that now lives in my parents' living room. The soft tick-tock that it makes is comforting and nostalgic.
 
-After seeing some 3D print designs showcasing the basics of watch movements, I became curious. Is it possible to 3D print a clock? But consumer 3D printers may not have enough resolution, and the required tolerances seem well beyond their capabilities.
+After seeing some 3D print designs showcasing basic watch movements, I became curious: is it possible to 3D print a clock? But consumer 3D printers may not have enough resolution, and the required tolerances seem well beyond their capabilities.
 
 What about DIYing one out of Lego? Can one be built that:
 * is a practical time-keeping device
@@ -53,7 +53,7 @@ Seeing that others have succeeded already, I knew what I wanted was achievable. 
 
 As stated previously, I wanted this to be a practical time keeping device. For me, that means I can't be winding this thing more than once per day. I also need to be able to rely on the displayed time being correct, and I don't want to be setting the time every day. To me that means the displayed time can't be off by more than around 1 minute.
 
-The clock has to sound nice, too. I wanted something to tickle my nostalgia, so it must audibly tick. Moreover, I wanted something that makes a sound on each second -- a 0.5s, 1s, or 2s pendulum would work, but a 1.5s pendulum wouldn't. A half-second pendulum is too fast and sounds frantic; a two-second pendulum (like what a grandfather clock would have) would be too long and look out of place. That just leaves a one-second pendulum as the way to go.
+The clock has to sound nice, too. I wanted something to tickle my nostalgia, so it must audibly tick. Moreover, I wanted something that makes a sound at least every second, on the second -- a 0.5s, 1s, or 2s pendulum would work, but a 1.5s pendulum wouldn't. A half-second pendulum is too fast and sounds frantic; a two-second pendulum (like what a grandfather clock would have) would be too long and look out of place. That just leaves a one-second pendulum as the way to go.
 
 To look nice, the clock needs to be short enough to hang on the wall around eye level, say around 5ft/1.5m off the ground. Also, the movement needs to be horizontally symmetric in certain ways -- the hands, pendulum, and weights should be centered horizontally. It should also have some form of face with at least hour markers. And ideally it should be small enough to jam inside of a wooden-looking body if desired.
 
@@ -75,18 +75,18 @@ Assuming we're using a **40-tooth gear as the escapement wheel**[^2] and a **1s 
   * minute hand rotates once every 3600 seconds $$ = \frac{1}{3600} Hz $$
   * **90x escapement wheel to minute hand gear reduction**: $$ \frac{3600}{40} = 90 $$
 
-[Lego gears have a pitch (distance between teeth) of π mm](https://orionrobots.co.uk/wiki/lego_specifications.html). Also, [these chain links](https://www.bricklink.com/v2/catalog/catalogitem.page?P=3711&idColor=11) mesh with every other gear tooth, meaning connected chain links have a 2π mm pitch or approximately 6.28mm.
+[Lego gears have a pitch (distance between teeth) of π mm](https://orionrobots.co.uk/wiki/lego_specifications.html). Also, [these chain links](https://www.bricklink.com/v2/catalog/catalogitem.page?P=3711&idColor=11) mesh with every other gear tooth, meaning connected chain links have a 2π mm pitch or approximately 6.28mm. Using that kind of chain to hang the weight and drive the clock:
   * 1m of drop distance ≈ 160 chain links
-  * **24h of runtime / 1.5m of drop = 16h/m ≈ 1h per 10 chain links**
+  * $$ \frac{24h \: runtime}{1.5m \: drop} = 16h/m \approx \frac{16h}{160 \: links} $$ or roughly **1h of runtime per 10 chain links**
 
 Further assuming we're driving the clock with the chain attached to a **24-tooth drive gear**[^3]:
   * 24 teeth = 12 chain links
   * drive gear rotates 10 chain links per hour $$ = \frac{1}{4320} Hz $$
-  * **about 108x escapement wheel to drive gear reduction**: $$ \frac{4320}{40} = 108 $$
+  * **around 100x escapement wheel to drive gear reduction**: $$ \frac{4320}{40} = 108 $$
 
 With a constant drive force (the drive weight is just pulled down by gravity) we can calculate the power consumption of a clock using the formula $$ P = \frac{W}{\Delta t} = m g v $$. With 24h runtime and 1.5m of drop, the relationship between drive weight and power consumption is $$ P \approx (170 e^{-6} \frac{m^{2}}{s^{3}}) mass $$.
 
-Based on [prior art](https://dsharlet.com/2017/11/04/practical-lego-pendulum-clock.html) a power consumption of around 25 μW is realistic. Assuming that level of efficiency, the power formulas above tell us how much weight we need: to achieve **25 μW of power consumption**, **24h of runtime**, and **1.5m of drop** requires **176g or 3-4 [weight bricks](https://www.bricklink.com/v2/catalog/catalogitem.page?P=73090b)** each weighing about 53g.
+Based on [prior art](https://dsharlet.com/2017/11/04/practical-lego-pendulum-clock.html) a power consumption of around 25 μW is realistic. Assuming that level of efficiency, the power formulas above tell us how much weight we need: to achieve **25 μW of power consumption** with **24h of runtime** and **1.5m of drop** requires **176g or 3-4 [weight bricks](https://www.bricklink.com/v2/catalog/catalogitem.page?P=73090b)** each weighing about 53g.
 
 Thanks to [Brick Experiment Channel](https://www.youtube.com/watch?v=7YGp5zebQFE), we can also put an upper bound on how much weight to use. In that video, **standard axles start to permanently deform between 0.11 N m and 0.18 N m of torque** which means **no more than 0.94kg of weight or 18 weight bricks** on a 24-tooth gear (12mm pitch radius).
 
@@ -96,9 +96,9 @@ Lego gears only come in certain sizes, and given two lego gears, **there are lim
 
 [https://marian42.de/gears/](https://marian42.de/gears/) is an excellent website that will tell you which gears you can use to achieve a certain gear ratio, and how to mesh gear pairs together.
 
-But reality is worse: not only are there limited ways that gears mesh, but being physical objects, Legos also take up physical space 🤮
+However, not only are there limited ways that gears mesh, but being physical objects, Legos also take up physical space 🤮. There are **more limited ways to arrange gears that mesh _and_ can be physically supported by axles**.
 
-Thus I wanted **better tooling**. Telling me how a particular pair of gears will mesh is nice, and telling me a possible sequence of gears is nice too, but that still leaves a lot of bin packing to arrange the entire gear train in 3D. I wanted **software to assist in computing and arranging the *entire* gear train**, given some of the constraints imposed by how the clock is supposed to work.
+Thus **I needed better tooling**. Telling me how a particular pair of gears will mesh is nice, and telling me a possible sequence of gears is nice too, but that still leaves a lot of bin packing to arrange the entire gear train in 3D. I wanted **software to assist in computing and arranging the _entire_ gear train**, given some of the constraints imposed by how the clock is supposed to work.
 
 The constraints for this clock:
 * physical viability
@@ -120,17 +120,17 @@ The constraints for this clock:
 
 Also, I'm not sure what criteria are used to sort the gear trains in various websites, but I wanted to play around with the **sorting to surface the "optimal" gear trains and placements**.
 
-So, I wrote some python scripts to do all that! Did I mention that my background is in software? :)
+So, I wrote a python script to do all that! Did I mention that my background is in software? :)
 
 ## How To Compute The Best Gear Trains Using Python
 
-The scripts are in my [`weinstein/lego-gear-calculator` repository on github](https://github.com/weinstein/lego-gear-calculator).
+The script is in my [`weinstein/lego-gear-calculator` repository on github](https://github.com/weinstein/lego-gear-calculator).
 
 The high level overview of how it works:
-  1. Find all the gear trains that achieve the target gear ratio
-  2. For each gear train, find all the ways those pairs of gears can be placed in 2D so that the pairs mesh
+  1. Find all the gear trains (sequences of gear pairs) that achieve the target gear ratio
+  2. For each gear train, find all the ways it can be placed in 2D with the gear pairs meshing together
   3. Use a greedy algorithm to determine the z-placement of gears on axles [^4]
-  4. Sort the results by criteria such as: number of gears, volume required, etc
+  4. Sort the results by criteria like number of gears, volume required, etc
 
 Here's the most interesting snippet which expresses all the constraints mentioned above and generates the actual clock gear train arrangements:
 ```python
@@ -225,7 +225,7 @@ How to read the output:
 * Entries on the same line go on the same axle
 * Following the snaking flow of power in the gear train from top to bottom tells you which gears are supposed to mesh together
 
-It's a crude blueprint of how the gear train should be arranged so that gears don't overlap with each other or their axles. But its very useful compared to the other web tools -- thanks to this script, I was able to find some new arrangements and cram the clock mechanism into a smaller volume.
+It's a crude blueprint of how the gear train should be arranged so that gears and axles don't overlap with each other. But its very useful compared to the other web tools -- thanks to this script, I was able to find some new arrangements and cram the clock mechanism into a smaller volume.
 
 ## How Does The Clock Work?
 
@@ -238,40 +238,45 @@ The gear on the left is used to wind the clock; the ratchet beneath the gear all
 
 ![ratcheting winding gear](/img/lego-clock/winding ratchet.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-The [H-loop chain design](https://www.youtube.com/watch?v=C6U09_QZjZU) is great because it allows the clock to continue running almost unaffected while rewinding without any additional parts besides the chain loop itself.
+The [H-loop chain design](https://www.youtube.com/watch?v=C6U09_QZjZU) is great because it allows the clock to continue running almost unaffected while rewinding, and doesn't require any additional parts for that feature.
 The only real downside is that it requires roughly twice as many chain links compared to a regular loop.
 
 Yanking on the chain to lift the weight and rewind the clock does put some additional tension on the drive gear.
-Unfortunately grasshopper clocks don't allow the pendulum to swing entirely freely, so the pendulum frequency that is dependent on the drive force. In theory, while winding, some drive force is added and causes the clock to run faster.
-In practice, I find that its negligable.
+Unfortunately grasshopper clocks don't allow the pendulum to swing entirely freely, so the pendulum frequency is dependent on the drive torque. In theory, while winding, some torque is added to the drive train and causes the clock to run faster.
+However in practice I find that its a negligable effect.
 
 This is what the hour/minute hand gearing looks like without any of the supports:
 
 ![hour and minute hand gear train](/img/lego-clock/hands gear train.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
 The coaxial hour and minute hands have a 12x gear ratio between them (16:16, 16:20, 24:8, 40:8).
-The minute hand is connected directly to the long central axle; the hour hand is a toothed 1x4 plate connected to the dark gray 16-tooth clutch gear.
+The minute hand is connected directly to the long central axle; the hour hand is a [toothed 1x4 plate](https://www.bricklink.com/v2/catalog/catalogitem.page?P=4263) connected to the dark gray [16-tooth clutch gear](https://www.bricklink.com/v2/catalog/catalogitem.page?P=6542).
+The red [16-tooth gear](https://www.bricklink.com/v2/catalog/catalogitem.page?P=18946) is where the minute hand connects to the rest of the gear train; there is a [2L axle with a friction pin](https://www.bricklink.com/v2/catalog/catalogitem.page?P=18651) in the red gear axled to a 24-tooth gear where the train continues.
 
-The red 16-tooth gear is where the minute hand connected to the rest of the gear train; there is a friction in in the red gear axled to a 24-tooth gear where the train continues.
-That friction pin is the key to allowing the hands to be set manually: it allows the weight to power the minute hand with small torques during normal operation, but slips when higher torques are applied by a human moving the minute hand.
+That friction pin is what allows the hands to be set manually: it allows the weight to power the minute hand with small torques during normal operation, but slips when higher torques are applied by a human moving the minute hand so that hand setting doesn't interfere with the escapement.
 
 Here's what the other side of the gear train looks without any supports:
 
 ![escapement drive train](/img/lego-clock/drive train.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-The axle with the red gear is the connection to the minute hand.
-The next axle in the train (the axle with the large black 36-tooth gear and two stacked 24-tooth gears) is the axle driven by the weights; the rightmost 24-tooth gear is where the drive chain goes.
-The train snakes down and then back up to the green 40-tooth escapement wheel in a 90x[^5] ratio (36:12, 20:12, 24:12, 24:8, 24:8).
+The axle with the red gear is the connection to the minute hand (also pictured above).
+The next axle in the train, with the large black 36-tooth gear and two stacked 24-tooth gears, is the axle driven by the weights; the rightmost 24-tooth gear is where the chain engages.
+The gear train snakes down and then back up to the green 40-tooth escapement wheel in a 90x[^5] ratio (36:12, 20:12, 24:12, 24:8, 24:8).
 
-The pendulum has bionicle teeth that sit on a knife edge made of angled liftarms to minimize friction:
+The pendulum has [bionicle teeth](https://www.bricklink.com/v2/catalog/catalogitem.page?P=41669) that sit on a knife edge suspension made of [angled liftarms](https://www.bricklink.com/v2/catalog/catalogitem.page?P=32348) to minimize friction:
 
 ![knife edge pendulum mount](/img/lego-clock/knife edge.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-A regular axle rotating inside of (and supported by) an axle hole wastes too much energy to friction to be efficient.
+A regular axle rotating inside of (and supported by) an axle hole has way too much friction and wastes too much energy to be efficient.
 
-The clock uses a [grasshopper escapement](https://en.wikipedia.org/wiki/Grasshopper_escapement) inspired by Dillon Sharlet's [grasshopper escapement](https://www.youtube.com/watch?v=To6Pg0Fo_8Q). The pendulum has some gray escapement pallets at the top for interfacing mechanically with the green escapement wheel:
+The clock uses a [grasshopper escapement](https://en.wikipedia.org/wiki/Grasshopper_escapement) inspired by Dillon Sharlet's [grasshopper escapement](https://www.youtube.com/watch?v=To6Pg0Fo_8Q), pictured below:
 
 ![grasshopper escapement](/img/lego-clock/grasshopper escapement.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
+
+The green 40-tooth gear is the escapement wheel powered by the falling weight.
+
+The pendulum has some gray escapement pallets made out of angled axle and pin connectors ([#5](https://www.bricklink.com/v2/catalog/catalogitem.page?P=32015) and [#2](https://www.bricklink.com/v2/catalog/catalogitem.page?P=32034)) and [pins](https://www.bricklink.com/v2/catalog/catalogitem.page?P=43093) for pallet teeth.
+The pallet stops sit behind the pallets and determine their resting angles.
 
 The escapement and pendulum cycle in steps:
   1. pallet A engages with the escapement teeth
@@ -280,14 +285,14 @@ The escapement and pendulum cycle in steps:
   4. the escapement wheel recoils slightly, releasing pallet A
   5. the escapement wheel pushes the newly engaged pallet B, and the cycle continues
 
-Since the pallets are allowed to rotate while in contact with the escapement teeth, and are released by the wheel recoiling, the pallets never need to slide against the escapement wheel's teeth, greatly reducing friction and wear of the soft plastic Lego pieces.
+Since the pallets are allowed to rotate while in contact with the escapement teeth, and are released by the wheel recoiling, the pallet teeth never need to slide against the escapement wheel's teeth, greatly reducing friction and wear of the soft plastic Lego pieces.
 
 Compare this to the [lever escapement](https://en.wikipedia.org/wiki/Lever_escapement) commonly found in modern wrist watches where the escapement tooth slides along the face of the pallets.
 Dillon Sharlet has an [excellent video](https://www.youtube.com/watch?v=eM4AT5o_-Xc) documenting the wear after one year of operation for a similar escapement with sliding pallets.
 
 The pallet positions and pallet stops can both be adjusted by sliding pieces along their supporting axles. The goals when tuning the escapement:
-  * pallets should make contact with the escapement teeth when the pendulum is at the apex of its swing
-  * both pallets should have equal 0.5s contact time with the wheel (ticks and tocks should be equal length)
+  * pallets should make contact with the escapement teeth when the pendulum is as close as possible to the apex of its swing
+  * both pallets should have equal 0.5s contact time with the wheel (easy to hear: ticks and tocks should sound equally long)
   * contact angle should minimize the chance that the pallets slip
 
 When the escapement is well-tuned, it "wants" to run and is moderately self-correcting.
@@ -296,19 +301,26 @@ Speaking of tuning, the pendulum length can be fine-tuned by turning a worm gear
 
 ![pendulum adjustment](/img/lego-clock/PXL_20221020_222812518.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-Finally, I added some rubber feet to the back of the clock to help support the body and allow it to be leveled along all 3 axes:
+Finally, I added some rubber feet to the back of the clock to help support the body and allow it to be leveled:
 
 ![rubber feet](/img/lego-clock/PXL_20221020_215251438.jpg){:style="display:block; margin-left:auto; margin-right:auto"}
 
-The vertical beam on the back of the frame allows the clock to be hung from a single nail.
+The vertical beam on the back of the frame allows the clock to be hung from a nail in the wall.
 
-## Future Improvements
+## Final Thoughts
 
-I'm pretty happy with the clock in its current form. But things can always be better. Some things I'd love to incorporate into future upgrades:
+I'm pretty happy with the clock in its current form.
+
+But things can always be better. My perfect dream clock would have:
   * an enclosure that looks like a real wooden wall clock
+  * chains and weights fully contained in the enclosure
   * an hourly chime
   * higher gear ratio and longer autonomy
   * a built-in on/off mechanism to halt or disengage the movement (in case of maintenance or migraines)
+
+I'm also pretty curious whether or not a Lego [torsion pendulum clock](https://en.wikipedia.org/wiki/Torsion_pendulum_clock) is possible. That could increase the runtime by orders of magnitude. So far I haven't seen any successful projects like that, though. 
+
+Thanks for reading! Feel free to reach out for any reason: [blog@jasty.dev](mailto:blog@jasty.dev)
 
 ## Footnotes
 
