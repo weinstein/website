@@ -6,9 +6,10 @@ description: >-
   Look, I made a thing!
 url: https://jasty.dev
 domain: jasty.dev
-social:
-  github: weinstein
-  linkedin: jhsw93
+minima:
+  social_links:
+    github: weinstein
+    linkedin: jhsw93
 rss: rss
 
 # Build settings
