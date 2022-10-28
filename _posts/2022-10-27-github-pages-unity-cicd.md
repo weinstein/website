@@ -1,0 +1,297 @@
+---
+layout: post
+title: "How to set up free CI/CD for Unity Web using GitHub Pages and Jekyll"
+date: 2022-10-27 10:27:00 -0700
+---
+
+This website is set up to automatically serve my in-progress games via the Unity web player, continuously as I'm developing them. Check out the [games](/games) page for examples.
+
+The CI/CD pipeline works like this:
+1. I commit changes to my game's repository
+2. [Actions](https://game.ci/) in that repo automatically
+  * run tests
+  * create a build
+  * push the build data to my github pages repository
+3. Actions in the github pages repository automatically rebuild and redeploy the jekyll site
+
+Now that its set up, if I want to share what I'm working on with my friends, I can quickly create a Jekyll page with a web player for the game.
+Best of all, that page will automatically update when I'm working on my game -- I just push my commits, and web visitors will see them 😎
+
+Here's an overview of the high level steps:
+1. set up jekyll site using github pages
+2. manually create a WebGL build and add it to the site using a jekyll include
+3. set up game.ci test/build actions
+4. set up build data push actions
+
+## Step 1: Set up a Jekyll site using GitHub pages
+
+I'm using Jekyll to generate the static content for this website. That makes it very easy to create new pages for games containing both a web player and markdown content.
+
+[Instructions for setting up a GitHub pages site with Jekyll can be found in the GitHub docs.](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll)
+
+On top of that, I have some additional set up to simplify adding static content for new games.
+
+Here's the file structure I'm using:
+
+* `_games/`: collections folder containing markdown pages, one per game
+* `games.md`: page listing all of the games and linking to their pages
+* `games/`: directory containing static assets to be served as-is, like the Unity WebGL build data and the shared WebGL player image assets.
+
+For example, the [dungeon](/games/dungeon) page is generated from `_games/dungeon.md` and has its WebGL build data in the `games/dungeon/` directory.
+
+### Add a new collection to the Jekyll config
+
+To get a similar setup, add the following snippet to `_config.yml`
+
+```yml
+collections:
+  games:
+    output: true
+```
+
+Or if you already have some collections defined, add a new entry for the `games` collection.
+
+Setting `output: true` will ensure that content pages for each markdown file in the `_games` folder will actually be generated (instead of only context for Liquid templates).
+
+### Create a page listing all of the games in the collection
+
+Create a new `games.md` page with a list of all the games (including links and descriptions):
+
+{% raw %}
+```markdown
+---
+layout: page
+title: Games
+permalink: /games/
+---
+
+Games:
+
+{% for game in site.games %}
+* <a href="{{ game.url }}"> {{ game.name }} </a>
+  {% if game.description %} <p> {{ game.description }} </p> {% endif %}
+{% endfor %}
+```
+{% endraw %}
+
+Of course, there won't be any links or descriptions rendered yet until we add our first game entry in the next step.
+
+### Add a test game entry
+
+The next steps will be a lot easier with at least one game page to use for testing.
+
+Create an entry for it by creating `_games/test.md`:
+
+```markdown
+---
+layout: default
+name: test
+description: dummy test entry
+---
+
+Test content
+```
+
+The `name` and `description` page variables don't actually affect the game page's content, but will be used to render entries in the `games.md` page from the previous step.
+
+Now if you preview the `/games/` page, you should see a link and description for the new test entry.
+
+## Step 2: Manually push a WebGL build to the site
+
+This step is optional, but it will make testing and iterating a lot easier. You'll need a Unity game that you can use to create a WebGL build from.
+
+Create a WebGL build. If you use the default player template, there should be several outputs:
+* `index.html` file containing HTML and scripts for the player
+* `TemplateData/` folder containing player image assets
+* `Build/` folder containing most of the game's data
+* `StreamingAssets/` folder containing the game's streaming assets
+
+`index.html` and `TemplateData/` are conceptually shared data common to all games -- just generic unity WebGL player stuff. `Build/` and `StreamingAssets/` data are game-specific data.
+
+Copy `index.html` to a new file called `_includes/unity-webgl-player.html` -- this will be the template for WebGL players included in markdown pages.
+`
+Copy the `TemplateData` folder to `games/UnityPlayerTemplateData` for serving.
+
+Finally, create a `games/test` folder to contain all the game data. Copy the `Build` and `StreamingAssets` folders to `games/test/Build` and `games/test/StreamingAssets` respectively.
+
+### Create the Unity WebGL player include
+
+After copying the default `index.html`, some modifications to `_includes/unity-webgl-player.html` will be required since the HTML generated by Unity will have hard-coded information specific to your game. We want to replace that with include parameters:
+* name: the name of the directory where the game build data lives
+* width/height: to adjust the player's size
+
+Find the `<head>` section and remove everything except for the stylesheet:
+
+```html
+<head>
+  <link rel="stylesheet" href="unity-player/TemplateData/style.css">
+</head>
+```
+
+Next, find the `unity-canvas` element and fill the width/height from parameters:
+
+{% raw %}
+```html
+<canvas id="unity-canvas"
+ width='{{include.width | default: "100%" }}'
+ height='{{include.height | default: "100%"}}'>
+</canvas>
+```
+{% endraw %}
+
+Next, find the `unity-build-title` element and replace the contents with something using the `include.name` parameter:
+
+{% raw %}
+```html
+<div id="unity-build-title">{{ include.name }}</div>
+```
+{% endraw %}
+
+Next, find the section of the `<script>` that sets up the config variables and change the URLs to match our structure:
+{% raw %}
+```js
+var buildUrl = "{{include.name}}/Build";
+var loaderUrl = buildUrl + "/WebGL.loader.js";
+var config = {
+  dataUrl: buildUrl + "/WebGL.data",
+  frameworkUrl: buildUrl + "/WebGL.framework.js",
+  codeUrl: buildUrl + "/WebGL.wasm",
+  streamingAssetsUrl: "{{include.name}}/StreamingAssets",
+  companyName: "DefaultCompany",
+  productName: "{{include.name}}",
+  productVersion: "0.0.1",
+  showBanner: unityShowBanner,
+};
+```
+{% endraw %}
+
+Also update any parts of the script modifying the canvas width/height like we did for the canvas element itself:
+{% raw %}
+```js
+canvas.style.width = '{{include.width | default: "100%"}}';
+canvas.style.height = '{{include.height | default: "100%"}}';
+```
+{% endraw %}
+
+Finally, we need to adjust the styling in `games/UnityPlayerTemplateData/style.css` to make the player look nice when there's other content on the page.
+
+Change the `unity-container` position and sizing, and add some padding below the footer:
+
+```css
+#unity-container { position: relative }
+#unity-container.unity-desktop { width: 100%; height: 100% }
+#unity-footer { position: relative; padding-bottom: 100px }
+```
+
+### Add a Unity WebGL player to the game page
+
+Now we're ready to update `_games/test.md` to add a unity player:
+
+{% raw %}
+```markdown
+---
+layout: default
+name: test
+description: dummy test entry
+---
+
+Test content above player
+
+{% include unity-webgl-player.html name=page.name %}
+
+Test content below player
+```
+{% endraw %}
+
+Preview the page and make sure everything looks good, adjusting styling in `games/UnityPlayerTemplateData/style.css` if necessary.
+
+## Set up Unity GitHub actions for testing/building
+
+Full instructions are in the [GameCI getting started docs](https://game.ci/docs/github/getting-started).
+
+Despite what the docs say, it isn't necessary to use Unity login email/password secrets -- an activated license is enough.
+
+Set up a license activation workflow following [these instructions](https://game.ci/docs/github/activation#acquiring-an-activation-file); you should only need to do this once to create the `UNITY_LICENSE` secret for your game's github repository.
+
+Next set up a workflow that will run tests and create a build. For example, I have the following workflow in `.github/workflows/main.yml`:
+
+{% raw %}
+```yml
+name: Unity Test/Build
+
+on: [push]
+
+jobs:
+  build:
+    name: Build Unity Project for WebGL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: Run tests
+        uses: game-ci/unity-test-runner@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v2
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          targetPlatform: WebGL
+          buildsPath: build
+```
+{% endraw %}
+
+For testing, it's helpful to have the workflow upload the build as an artifact so that you can manually inspect the outputs. However, uploaded artifacts consume limited free storage space for your repository, so I wouldn't recommend keeping that step indefinitely.
+
+If you want the build uploaded as an artifact by the workflow, add a step after `Build WebGL` like this:
+
+```yml
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build
+```
+
+The `path` needs to match the `buildsPath` in the unity builder step.
+
+## Set up actions for pushing builds to the GitHub pages site
+
+I opted for using an existing [`github action`](https://github.com/cpina/github-action-push-to-another-repository) implementation for this. Some setup is required to get permissions working correctly -- the action runner in the game's source repository needs an SSH deploy key to authenticate when pushing to the destination GitHub pages repository. [Full instructions here](https://cpina.github.io/push-to-another-repository-docs/setup-using-ssh-deploy-keys.html#setup-ssh-deploy-keys).
+
+After that's set up, adding a workflow step to push to the GitHub pages repo after the build step is simple:
+
+{% raw %}
+```yml
+      - name: Remove unnecessary web player template data
+        run: rm -r build/WebGL/WebGL/index.html build/WebGL/WebGL/TemplateData
+      - name: Push WebGL build to pages repo
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        with:
+          source-directory: 'build/WebGL/WebGL'
+          destination-github-username: 'weinstein'
+          destination-repository-name: 'weinstein.github.io'
+          target-directory: 'games/test'
+```
+{% endraw %}
+
+The `source-directory` needs to match the `buildPath` from the unity builder step, and the `target-directory` needs to match the name of the game in the Jekyll collection.
+
+## Testing it all out
+
+If you pushed the GitHub action changes to the game repository last, then the new actions should already run for that push. You can monitor progress from the "Actions" tab in your repository. If all goes well, a commit should be pushed automatically to the destination GitHub pages repo.
+
+After that, you still need to wait for _more_ GitHub actions in the pages repo to build the Jekyll site and deploy the new static content for serving. But once both those steps are complete, the changes pushed to the game repository will be live!
