@@ -57,6 +57,8 @@ The clock has to sound nice, too. I wanted something to tickle my nostalgia, so 
 
 To look nice, the clock needs to be short enough to hang on the wall around eye level, say around 5ft/1.5m off the ground. Also, the movement needs to be horizontally symmetric in certain ways -- the hands, pendulum, and weights should be centered horizontally. It should also have some form of face with at least hour markers. And ideally it should be small enough to jam inside of a wooden-looking body if desired.
 
+Finally, it's somewhat important to me that the clock is **100% Lego parts** and doesn't require any modifications like cutting or glueing.
+
 In summary:
 * run at least 24h between windings
 * use around 1.5m of drop distance
@@ -65,6 +67,7 @@ In summary:
 * hands, pendulum, and weights visually centered
 * face with hour markers
 * compact
+* 100% Lego parts
 
 ### Concrete Requirements
 
