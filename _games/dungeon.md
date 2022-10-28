@@ -1,8 +1,10 @@
 ---
-layout: unity-webgl-player
+layout: default 
 name: dungeon
 description: 2D top-down roguelike with procedurally generated dungeons.
 ---
+
+{% include unity-webgl-player.html name=page.name %}
 
 Use `WADS`/arrow keys to move.
 
