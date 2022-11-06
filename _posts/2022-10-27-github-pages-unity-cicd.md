@@ -219,7 +219,10 @@ Next set up a workflow that will run tests and create a build. For example, I ha
 ```yml
 name: Unity Test/Build
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -289,6 +292,8 @@ After that's set up, adding a workflow step to push to the GitHub pages repo aft
 {% endraw %}
 
 The `source-directory` needs to match the `buildPath` from the unity builder step, and the `target-directory` needs to match the name of the game in the Jekyll collection.
+
+It's really useful to run the build/test steps for any `push` or `pull_request` to any branch, since that adds an extra level of confidence when somebody else sends you a pull request. However, unless you want to allow anybody to deploy to your website on your behalf merely by sending you a push request (!!!) it's important **not** to run any push steps for pull requests! I'd recommend only using those as actions triggered on pushes to a `main`/`master`/`prod`-like branch.
 
 ## Testing it all out
 
