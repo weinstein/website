@@ -8,8 +8,8 @@ url: https://jasty.dev
 domain: jasty.dev
 minima:
   social_links:
-    github: weinstein
-    linkedin: jhsw93
+    - { platform: github, user_url: "https://github.com/weinstein" }
+    - { platform: linkedin, user_url: "https://linkedin.com/jhsw93" }
 rss: rss
 
 # Build settings
