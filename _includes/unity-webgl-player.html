@@ -1,6 +1,6 @@
 
   <head>
-    <link rel="stylesheet" href="UnityPlayerTemplateData/style.css">
+    <link rel="stylesheet" href="/games/UnityPlayerTemplateData/style.css">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -51,13 +51,13 @@
         updateBannerVisibility();
       }
 
-      var buildUrl = "{{include.name}}/Build";
+      var buildUrl = "/games/{{include.name}}/Build";
       var loaderUrl = buildUrl + "/WebGL.loader.js";
       var config = {
         dataUrl: buildUrl + "/WebGL.data",
         frameworkUrl: buildUrl + "/WebGL.framework.js",
         codeUrl: buildUrl + "/WebGL.wasm",
-        streamingAssetsUrl: "{{include.name}}/StreamingAssets",
+        streamingAssetsUrl: "/games/{{include.name}}/StreamingAssets",
         companyName: "DefaultCompany",
         productName: "{{include.name}}",
         productVersion: "0.0.1",
